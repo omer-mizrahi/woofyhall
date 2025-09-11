@@ -8,7 +8,7 @@ import Stripe from "stripe"
 
 const prisma = new PrismaClient()
 
-export default NextAuth({
+export const authOptions = {
     adapter: PrismaAdapter(prisma),
     providers: [
         GoogleProvider({
@@ -17,7 +17,7 @@ export default NextAuth({
         }),
     ],
     events: {
-        createUser: async ({ user }) => {
+        createUser: async ({ user }: any) => {
             // get stripe access
             const stripe = new Stripe(process.env.STRIP_SECRET_KEY!)
             // create stripe customer
@@ -34,4 +34,6 @@ export default NextAuth({
             }
         }
     }
-})
+}
+
+export default NextAuth(authOptions)
